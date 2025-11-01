@@ -1,0 +1,107 @@
+<div class="orders-container">
+  <!-- Header -->
+  <div class="header">
+    <h2>Orders</h2>
+    <button class="create-btn" (click)="openCreateOrder()">+ Create Order</button>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-cards">
+    <div class="card">
+      <h4>Total Orders</h4>
+      <h2>{{ totalOrders }}</h2>
+    </div>
+    <div class="card">
+      <h4>Pending</h4>
+      <h2>{{ pendingOrders }}</h2>
+    </div>
+    <div class="card">
+      <h4>Delivered</h4>
+      <h2>{{ deliveredOrders }}</h2>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters">
+    <select [(ngModel)]="selectedStatus" (change)="filterOrders()">
+      <option value="">All Status</option>
+      <option value="CREATED">Created</option>
+      <option value="SHIPPED">Shipped</option>
+      <option value="DELIVERED">Delivered</option>
+      <option value="CANCELLED">Cancelled</option>
+    </select>
+  </div>
+
+  <div class="main-content">
+    <!-- Orders Table -->
+    <div class="orders-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>User ID</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Created At</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of filteredOrders" 
+              (click)="selectOrder(order)"
+              [class.selected]="order === selectedOrder">
+            <td>#{{ order.id }}</td>
+            <td>{{ order.userId }}</td>
+            <td>₹{{ order.totalAmount }}</td>
+            <td>
+              <span class="status" [ngClass]="order.status.toLowerCase()">{{ order.status }}</span>
+            </td>
+            <td>{{ order.createdAt | date:'yyyy-MM-dd, h:mm a' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Details Panel -->
+    <div class="order-details" *ngIf="selectedOrder">
+      <h3>Order Details</h3>
+      <p><strong>Order ID:</strong> #{{ selectedOrder.id }}</p>
+      <p><strong>User ID:</strong> {{ selectedOrder.userId }}</p>
+      <p><strong>Amount:</strong> ₹{{ selectedOrder.totalAmount }}</p>
+      <p><strong>Status:</strong>
+        <span class="status" [ngClass]="selectedOrder.status.toLowerCase()">{{ selectedOrder.status }}</span>
+      </p>
+      <p><strong>Date:</strong> {{ selectedOrder.createdAt | date:'yyyy-MM-dd' }}</p>
+
+      <button class="btn-deliver"
+        *ngIf="selectedOrder.status === 'CREATED'"
+        (click)="markAsDelivered(selectedOrder)">
+        Mark as Delivered
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" *ngIf="showCreateModal">
+    <div class="modal-content">
+      <h3>Create New Order</h3>
+
+      <label>User ID:</label>
+      <input type="text" [(ngModel)]="newOrder.userId" placeholder="Enter user ID" />
+
+      <label>Total Amount:</label>
+      <input type="number" [(ngModel)]="newOrder.totalAmount" placeholder="Enter total amount" />
+
+      <label>Status:</label>
+      <select [(ngModel)]="newOrder.status">
+        <option value="CREATED">CREATED</option>
+        <option value="SHIPPED">SHIPPED</option>
+        <option value="DELIVERED">DELIVERED</option>
+      </select>
+
+      <div class="modal-actions">
+        <button class="create" (click)="createOrder()">Create</button>
+        <button class="cancel" (click)="closeCreateModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

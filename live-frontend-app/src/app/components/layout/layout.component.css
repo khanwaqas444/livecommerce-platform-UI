@@ -1,0 +1,19 @@
+.layout-container {
+  display: flex;
+}
+
+.main-content {
+  margin-left: 220px;
+  transition: margin-left 0.3s ease;
+  padding: 25px;
+  background-color: #f6f7fb;
+  min-height: 100vh;
+  width: calc(100% - 220px);
+  overflow-y: auto;
+  font-family: Verdana, sans-serif;
+}
+
+.sidebar.collapsed + .main-content {
+  margin-left: 80px;
+  width: calc(100% - 80px);
+}
