@@ -1,115 +1,128 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
-import { FormsModule } from '@angular/forms'; 
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { OrderService, CreateOrderRequest, Order } from '../../core/order.service';
 import { HttpClientModule } from '@angular/common/http';
-import { OrderService, Order } from '../../core/order.service';
 
 @Component({
   selector: 'app-orders',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, FormsModule, DatePipe],
+  imports: [CommonModule, FormsModule, HttpClientModule],
   templateUrl: './orders.component.html',
-  styleUrls: ['./orders.component.scss'] 
+  styleUrls: ['./orders.component.css']
 })
 export class OrdersComponent implements OnInit {
   orders: Order[] = [];
   filteredOrders: Order[] = [];
   selectedOrder?: Order;
-  error: string | null = null;
-  loading = false;
-  selectedStatus: string = '';
+  selectedStatus = '';
 
+  // stats
   totalOrders = 0;
   pendingOrders = 0;
   deliveredOrders = 0;
 
+  // create modal
+  showCreateModal = false;
+  newOrder: CreateOrderRequest = {
+    userId: '',
+    items: [{ productId: 0, quantity: 1 }]
+  };
+
   constructor(private orderService: OrderService) {}
 
-  ngOnInit(): void {
-    this.fetchOrders();
+  ngOnInit() {
+    this.loadOrders();
   }
 
-  fetchOrders(): void {
-    this.loading = true;
+  loadOrders() {
     this.orderService.getAllOrders().subscribe({
-      next: (data) => {
+      next: (data: Order[]) => {
         this.orders = data;
         this.filteredOrders = data;
-        this.calculateStats();
-        this.loading = false;
+        this.updateStats();
       },
-      error: () => {
-        this.error = 'Failed to load orders';
-        this.loading = false;
+      error: (err) => {
+        console.error('Failed to load orders', err);
       }
     });
   }
 
-  calculateStats(): void {
+  updateStats() {
     this.totalOrders = this.orders.length;
     this.pendingOrders = this.orders.filter(o => o.status === 'CREATED' || o.status === 'SHIPPED').length;
     this.deliveredOrders = this.orders.filter(o => o.status === 'DELIVERED').length;
   }
 
-  selectOrder(order: Order): void {
+  filterOrders() {
+    this.filteredOrders = this.selectedStatus
+      ? this.orders.filter(o => o.status === this.selectedStatus)
+      : this.orders;
+  }
+
+  selectOrder(order: Order) {
     this.selectedOrder = order;
   }
 
-  filterOrders(): void {
-    if (!this.selectedStatus) {
-      this.filteredOrders = this.orders;
+  openCreateOrder() {
+    this.showCreateModal = true;
+    this.newOrder = { userId: '', items: [{ productId: 0, quantity: 1 }] };
+  }
+
+  closeCreateModal() {
+    this.showCreateModal = false;
+  }
+
+  addItem() {
+    this.newOrder.items.push({ productId: 0, quantity: 1 });
+  }
+
+  removeItem(index: number) {
+    if (this.newOrder.items.length > 1) {
+      this.newOrder.items.splice(index, 1);
     } else {
-      this.filteredOrders = this.orders.filter(o => o.status === this.selectedStatus);
+      // keep at least one item row
+      this.newOrder.items[0] = { productId: 0, quantity: 1 };
     }
   }
 
-  markAsDelivered(order: Order): void {
-    order.status = 'DELIVERED';
-    this.calculateStats();
-  }
-
-  showCreateModal = false;
-newOrder = {
-  userId: '',
-  totalAmount: 0,
-  status: 'CREATED'
-};
-
-openCreateOrder(): void {
-  this.showCreateModal = true;
-}
-
-closeCreateModal(): void {
-  this.showCreateModal = false;
-  this.newOrder = { userId: '', totalAmount: 0, status: 'CREATED' };
-}
-
-createOrder(): void {
-  if (!this.newOrder.userId || this.newOrder.totalAmount <= 0) {
-    alert('Please fill all fields correctly.');
-    return;
-  }
-
-  const order: Order = {
-    id: '', // will come from backend
-    userId: this.newOrder.userId,
-    totalAmount: this.newOrder.totalAmount,
-    status: this.newOrder.status,
-    deleted: false,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  };
-
-  this.orderService.createOrder(order).subscribe({
-    next: (created) => {
-      this.orders.unshift(created);
-      this.filteredOrders = [...this.orders];
-      this.calculateStats();
-      this.closeCreateModal();
-    },
-    error: () => {
-      alert('Failed to create order');
+  createOrder() {
+    // basic validation
+    if (!this.newOrder.userId || this.newOrder.items.length === 0) {
+      alert('Please provide userId and at least one item.');
+      return;
     }
-  });
-}
+    for (const it of this.newOrder.items) {
+      if (!it.productId || it.quantity <= 0) {
+        alert('Please check productId and quantity for each item.');
+        return;
+      }
+    }
+
+    this.orderService.createOrder(this.newOrder).subscribe({
+      next: (created: Order) => {
+        console.log('Order created', created);
+        this.loadOrders();
+        this.closeCreateModal();
+      },
+      error: (err) => {
+        console.error('Create order failed', err);
+        alert('Failed to create order. Check console for details.');
+      }
+    });
+  }
+
+  markAsDelivered(order: Order) {
+    // mark status locally and call update endpoint
+    const updated: Order = { ...order, status: 'DELIVERED' };
+    this.orderService.updateOrder(updated).subscribe({
+      next: (res) => {
+        this.loadOrders();
+      },
+      error: (err) => {
+        console.error('Failed to mark delivered', err);
+        alert('Failed to update order.');
+      }
+    });
+  }
 }

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Order {
-  id: string;
+  id: number;
   userId: string;
   totalAmount: number;
   status: string;
@@ -12,22 +12,34 @@ export interface Order {
   updatedAt: string;
 }
 
+// 👇 define separate type for creating new order
+export interface CreateOrderRequest {
+  userId: string;
+  items: {
+    productId: number;
+    quantity: number;
+  }[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
-  private apiUrl = 'http://localhost:8084/api/orders'; 
+  private apiUrl = 'http://localhost:8084/api/orders';
 
   constructor(private http: HttpClient) {}
 
+  // ✅ Get all orders
   getAllOrders(): Observable<Order[]> {
     return this.http.get<Order[]>(this.apiUrl);
   }
 
-  createOrder(order: Order): Observable<Order> {
-    return this.http.post<Order>(this.apiUrl, order);
+  // ✅ Create new order using CreateOrderRequest
+  createOrder(request: CreateOrderRequest): Observable<Order> {
+    return this.http.post<Order>(this.apiUrl, request);
   }
 
+  // ✅ Update existing order
   updateOrder(order: Order): Observable<Order> {
     return this.http.put<Order>(`${this.apiUrl}/${order.id}`, order);
   }

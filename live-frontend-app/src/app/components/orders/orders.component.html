@@ -81,27 +81,32 @@
   </div>
 
   <!-- Modal -->
-  <div class="modal" *ngIf="showCreateModal">
-    <div class="modal-content">
-      <h3>Create New Order</h3>
+<div class="modal" *ngIf="showCreateModal">
+  <div class="modal-content">
+    <h3>Create New Order</h3>
 
-      <label>User ID:</label>
-      <input type="text" [(ngModel)]="newOrder.userId" placeholder="Enter user ID" />
+    <label>User ID:</label>
+    <input type="text" [(ngModel)]="newOrder.userId" placeholder="Enter user ID" />
 
-      <label>Total Amount:</label>
-      <input type="number" [(ngModel)]="newOrder.totalAmount" placeholder="Enter total amount" />
+    <div class="item-section">
+      <h4>Order Items</h4>
 
-      <label>Status:</label>
-      <select [(ngModel)]="newOrder.status">
-        <option value="CREATED">CREATED</option>
-        <option value="SHIPPED">SHIPPED</option>
-        <option value="DELIVERED">DELIVERED</option>
-      </select>
+      <div *ngFor="let item of newOrder.items; let i = index" class="item-input">
+        <label>Product ID:</label>
+        <input type="number" [(ngModel)]="item.productId" placeholder="Product ID" />
 
-      <div class="modal-actions">
-        <button class="create" (click)="createOrder()">Create</button>
-        <button class="cancel" (click)="closeCreateModal()">Cancel</button>
+        <label>Quantity:</label>
+        <input type="number" [(ngModel)]="item.quantity" placeholder="Quantity" />
+
+        <button class="remove-item" (click)="removeItem(i)">✖</button>
       </div>
+
+      <button class="add-item" (click)="addItem()">+ Add Item</button>
+    </div>
+
+    <div class="modal-actions">
+      <button class="create" (click)="createOrder()">Create</button>
+      <button class="cancel" (click)="closeCreateModal()">Cancel</button>
     </div>
   </div>
 </div>
