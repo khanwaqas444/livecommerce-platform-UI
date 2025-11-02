@@ -7,6 +7,7 @@ import { ReservationComponent } from './components/reservation/reservation.compo
 import { LiveStreamsComponent } from './components/live-streams/live-streams.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { AnalyticsComponent } from './components/analytics/analytics.component';
+import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 
 export const routes: Routes = [
   {
@@ -17,6 +18,7 @@ export const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'orders', component: OrdersComponent },
       { path: 'products', component: ProductsComponent },
+      { path: 'products/:id', component: ProductDetailComponent },
       { path: 'reservations', component: ReservationComponent },
       { path: 'streams', component: LiveStreamsComponent },
       { path: 'analytics', component: AnalyticsComponent },

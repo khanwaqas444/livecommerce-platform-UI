@@ -49,10 +49,11 @@ export class OrdersComponent implements OnInit {
   }
 
   updateStats() {
-    this.totalOrders = this.orders.length;
-    this.pendingOrders = this.orders.filter(o => o.status === 'CREATED' || o.status === 'SHIPPED').length;
-    this.deliveredOrders = this.orders.filter(o => o.status === 'DELIVERED').length;
-  }
+  this.totalOrders = this.orders.length;
+  this.pendingOrders = this.orders.filter(o => o.status === 'PENDING' || o.status === 'CREATED').length;
+  this.deliveredOrders = this.orders.filter(o => o.status === 'DELIVERED').length;
+}
+
 
   filterOrders() {
     this.filteredOrders = this.selectedStatus
@@ -113,16 +114,16 @@ export class OrdersComponent implements OnInit {
   }
 
   markAsDelivered(order: Order) {
-    // mark status locally and call update endpoint
-    const updated: Order = { ...order, status: 'DELIVERED' };
-    this.orderService.updateOrder(updated).subscribe({
-      next: (res) => {
-        this.loadOrders();
-      },
-      error: (err) => {
-        console.error('Failed to mark delivered', err);
-        alert('Failed to update order.');
-      }
-    });
-  }
+  this.orderService.updateOrderStatus(order.id, 'DELIVERED').subscribe({
+    next: (res) => {
+      console.log('Order marked as delivered:', res);
+      this.loadOrders();
+    },
+    error: (err) => {
+      console.error('Failed to mark delivered', err);
+      alert('Failed to update order.');
+    }
+  });
+}
+
 }

@@ -1,1 +1,51 @@
-<p>products works!</p>
+<div class="page-header">
+  <h2>Products</h2>
+  <button class="btn-add" (click)="openAddModal()">+ Add Product</button>
+</div>
+
+<!-- 🔹 Product Grid -->
+<div class="product-grid">
+  <div *ngFor="let p of products" class="product-card">
+    <img [src]="'http://localhost:8082' + p.imageUrl" alt="{{ p.name }}">
+    <div class="card-content">
+      <div class="card-header">
+        <h3>{{ p.name }}</h3>
+        <span class="status" [ngClass]="p.live ? 'active' : 'inactive'">
+          {{ p.live ? 'Active' : 'Inactive' }}
+        </span>
+      </div>
+      <p class="category">{{ p.category }}</p>
+      <p class="price">₹{{ p.price }}</p>
+      <p class="desc">{{ p.description }}</p>
+
+      <div class="stock-info">
+        <span [ngClass]="p.stock > 0 ? 'in-stock' : 'out-of-stock'">
+          {{ p.stock > 0 ? 'In Stock' : 'Out of Stock' }}
+        </span>
+        <span class="sku">#{{ p.id }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 🔹 Modal -->
+<div class="modal-backdrop" *ngIf="showAddModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Add Product</h3>
+      <button class="close-btn" (click)="closeAddModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="text" placeholder="Name" [(ngModel)]="newProduct.name">
+      <textarea placeholder="Description" [(ngModel)]="newProduct.description"></textarea>
+      <input type="number" placeholder="Price" [(ngModel)]="newProduct.price">
+      <input type="text" placeholder="Category" [(ngModel)]="newProduct.category">
+      <input type="number" placeholder="Stock" [(ngModel)]="newProduct.stock">
+      <input type="file" (change)="onFileChange($event)">
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="closeAddModal()">Cancel</button>
+      <button class="btn-save" (click)="addProduct()">Save</button>
+    </div>
+  </div>
+</div>

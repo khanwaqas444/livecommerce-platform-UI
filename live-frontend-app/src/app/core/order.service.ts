@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Order {
-  id: number;
+  id: string;
   userId: string;
   totalAmount: number;
   status: string;
@@ -38,9 +38,18 @@ export class OrderService {
   createOrder(request: CreateOrderRequest): Observable<Order> {
     return this.http.post<Order>(this.apiUrl, request);
   }
+  
+ updateOrderStatus(orderId: string, status: string): Observable<Order> {
+  const params = new HttpParams().set('status', status);
+  return this.http.put<Order>(`${this.apiUrl}/${orderId}/status`, {}, { params });
+}
 
-  // ✅ Update existing order
-  updateOrder(order: Order): Observable<Order> {
+
+   updateOrder(order: Order): Observable<Order> {
     return this.http.put<Order>(`${this.apiUrl}/${order.id}`, order);
+  }
+
+  cancelOrder(orderId: string): Observable<Order> {
+    return this.http.put<Order>(`${this.apiUrl}/${orderId}/cancel`, {});
   }
 }
