@@ -1,1 +1,126 @@
-<p>reservation works!</p>
+<div class="page-header">
+  <h2>Reservations</h2>
+  <div class="search-box">
+    <input type="text" placeholder="Search by customer name, phone, booking..." [(ngModel)]="searchTerm" (input)="search()" />
+    <button class="calendar-btn" (click)="toggleCalendarView()">📅 Calendar View</button>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <button *ngFor="let t of tabs"
+          [class.active]="activeTab === t.key"
+          (click)="selectTab(t.key)">
+    {{ t.label }}
+    <span *ngIf="t.count">{{ t.count }}</span>
+  </button>
+</div>
+
+<!-- Filter Section -->
+<div class="filter-box">
+  <div class="filter-item">
+    <label>Status</label>
+    <select [(ngModel)]="filters.status">
+      <option value="">All Status</option>
+      <option value="Confirmed">Confirmed</option>
+      <option value="Pending">Pending</option>
+      <option value="Cancelled">Cancelled</option>
+    </select>
+  </div>
+
+  <div class="filter-item">
+    <label>Date Range</label>
+    <select [(ngModel)]="filters.dateRange">
+      <option value="today">Today</option>
+      <option value="tomorrow">Tomorrow</option>
+      <option value="week">This Week</option>
+      <option value="custom">Custom Range</option>
+    </select>
+  </div>
+
+  <div class="filter-item">
+    <label>Product</label>
+    <select [(ngModel)]="filters.product">
+      <option value="">All Products</option>
+      <option *ngFor="let p of productList" [value]="p">{{ p }}</option>
+    </select>
+  </div>
+
+  <div class="filter-item">
+    <label>Sort By</label>
+    <select [(ngModel)]="filters.sortBy">
+      <option value="newest">Date (Newest First)</option>
+      <option value="oldest">Date (Oldest First)</option>
+    </select>
+  </div>
+
+  <div class="filter-buttons">
+    <button class="btn-apply" (click)="applyFilters()">Apply Filters</button>
+    <button class="btn-clear" (click)="clearFilters()">Clear All</button>
+  </div>
+</div>
+
+<!-- Table Section -->
+<div class="table-section" *ngIf="!calendarView">
+  <div class="table-header">
+    <h3>{{ filteredReservations.length }} Reservations for {{ activeTab | titlecase }}</h3>
+    <div class="table-actions">
+      <span>{{ selectedCount }} selected</span>
+      <button class="btn-outline" (click)="sendReminders()">📩 Send Reminder</button>
+      <button class="btn-outline" (click)="export('csv')">📤 Export</button>
+    </div>
+  </div>
+
+  <table class="table" *ngIf="filteredReservations.length > 0">
+    <thead>
+      <tr>
+        <th><input type="checkbox" (change)="toggleSelectAll($event)" /></th>
+        <th>Booking ID</th>
+        <th>Customer</th>
+        <th>Date & Time</th>
+        <th>Product</th>
+        <th>People</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let r of filteredReservations">
+        <td><input type="checkbox" [(ngModel)]="r.selected" (change)="updateSelectedCount()" /></td>
+        <td>#{{ r.bookingId }}</td>
+        <td>
+          <div class="cust-info">
+            <div class="avatar">{{ r.customerName[0] }}</div>
+            <div>
+              <strong>{{ r.customerName }}</strong><br />
+              <small>📞 {{ r.customerPhone }}</small>
+            </div>
+          </div>
+        </td>
+        <td>
+          {{ (r.reservationDate || r.createdAt) | date:'MMM d, y' }} <br />
+          <small>{{ r.startTime }} - {{ r.endTime }}</small>
+        </td>
+        <td>{{ r.productName }}</td>
+        <td>{{ r.people }}</td>
+        <td><span class="status" [ngClass]="r.status.toLowerCase()">{{ r.status }}</span></td>
+        <td class="actions">
+          <button class="btn-view">👁 View</button>
+          <button class="btn-confirm" *ngIf="r.status==='Pending'" (click)="updateStatus(r,'Confirmed')">✓ Confirm</button>
+          <button class="btn-cancel" *ngIf="r.status!=='Cancelled'" (click)="updateStatus(r,'Cancelled')">✕</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="filteredReservations.length === 0" class="no-data">
+    No reservations found.
+  </div>
+</div>
+
+<!-- Calendar View -->
+<div *ngIf="calendarView" class="calendar-view">
+  <full-calendar [options]="calendarOptions"></full-calendar>
+</div>
+
