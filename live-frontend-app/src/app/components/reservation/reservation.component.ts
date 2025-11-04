@@ -148,6 +148,20 @@ export class ReservationsComponent implements OnInit {
     });
   }
 
+  callCustomer(phone: string) {
+  if (phone) {
+    window.open(`tel:${phone}`, '_self');
+  }
+}
+
+messageCustomer(phone: string) {
+  if (phone) {
+    // WhatsApp direct message link
+    window.open(`https://wa.me/${phone.replace('+', '')}`, '_blank');
+  }
+}
+
+
   toggleSelectAll(e: any): void {
     const checked = e.target.checked;
     this.filteredReservations.forEach(r => (r.selected = checked));

@@ -1,16 +1,15 @@
 <div class="page-header">
   <h2>Reservations</h2>
   <div class="search-box">
-    <input type="text" placeholder="Search by customer name, phone, booking..." [(ngModel)]="searchTerm" (input)="search()" />
+    <input type="text" placeholder="Search by customer name, phone, booking..." [(ngModel)]="searchTerm"
+      (input)="search()" />
     <button class="calendar-btn" (click)="toggleCalendarView()">📅 Calendar View</button>
   </div>
 </div>
 
 <!-- Tabs -->
 <div class="tabs">
-  <button *ngFor="let t of tabs"
-          [class.active]="activeTab === t.key"
-          (click)="selectTab(t.key)">
+  <button *ngFor="let t of tabs" [class.active]="activeTab === t.key" (click)="selectTab(t.key)">
     {{ t.label }}
     <span *ngIf="t.count">{{ t.count }}</span>
   </button>
@@ -106,9 +105,27 @@
         <td>{{ r.people }}</td>
         <td><span class="status" [ngClass]="r.status.toLowerCase()">{{ r.status }}</span></td>
         <td class="actions">
-          <button class="btn-view">👁 View</button>
-          <button class="btn-confirm" *ngIf="r.status==='Pending'" (click)="updateStatus(r,'Confirmed')">✓ Confirm</button>
-          <button class="btn-cancel" *ngIf="r.status!=='Cancelled'" (click)="updateStatus(r,'Cancelled')">✕</button>
+          <button class="btn-view">View</button>
+
+          <!-- Show Confirm button if status is Pending -->
+          <button class="btn-confirm" *ngIf="r.status === 'Pending'" (click)="updateStatus(r, 'Confirmed')">
+            ✓ Confirm
+          </button>
+
+          <!-- Show Cancel button if not Cancelled -->
+          <button class="btn-cancel" *ngIf="r.status !== 'Cancelled'" (click)="updateStatus(r, 'Cancelled')">
+            ✕
+          </button>
+
+          <!-- When status is Confirmed, show Call & Message buttons -->
+          <ng-container *ngIf="r.status === 'Confirmed'">
+            <button class="btn-call" (click)="callCustomer(r.customerPhone)">
+              📞 Call
+            </button>
+            <button class="btn-msg" (click)="messageCustomer(r.customerPhone)">
+              💬 Message
+            </button>
+          </ng-container>
         </td>
       </tr>
     </tbody>
@@ -123,4 +140,3 @@
 <div *ngIf="calendarView" class="calendar-view">
   <full-calendar [options]="calendarOptions"></full-calendar>
 </div>
-

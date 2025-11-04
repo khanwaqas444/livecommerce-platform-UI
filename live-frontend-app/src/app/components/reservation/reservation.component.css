@@ -191,33 +191,48 @@
     }
 
     .actions {
-      display: flex;
-      gap: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 
-      .btn-view {
-        background: #ecebff;
-        color: #6c63ff;
-        border: none;
-        border-radius: 5px;
-        padding: 4px 8px;
-      }
+  button {
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: 0.2s;
+  }
 
-      .btn-confirm {
-        background: #4caf50;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        padding: 4px 8px;
-      }
+  .btn-view {
+    background: #e6e6ff;
+    color: #4c49ff;
+  }
 
-      .btn-cancel {
-        background: #f44336;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        padding: 4px 8px;
-      }
-    }
+  .btn-confirm {
+    background: #22c55e;
+    color: white;
+  }
+
+  .btn-cancel {
+    background: #f87171;
+    color: white;
+  }
+
+  .btn-call {
+    background: #60a5fa;
+    color: white;
+  }
+
+  .btn-msg {
+    background: #a855f7;
+    color: white;
+  }
+
+  button:hover {
+    opacity: 0.85;
+  }
+}
   }
 
   .no-data {
