@@ -1,243 +1,41 @@
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
+.reservation-container {
+  padding: 20px;
 
-  h2 {
-    font-size: 1.6rem;
-    font-weight: 600;
-  }
-
-  .search-box {
-    display: flex;
-    gap: 0.5rem;
-
-    input {
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      padding: 6px 12px;
-      width: 260px;
-    }
-
-    .calendar-btn {
-      background: linear-gradient(90deg, #7f6cff, #6c63ff);
-      color: white;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-  }
-}
-
-.tabs {
-  display: flex;
-  gap: 1.5rem;
-  margin-bottom: 1.2rem;
-  border-bottom: 1px solid #eee;
-
-  button {
-    background: none;
-    border: none;
-    font-weight: 500;
-    color: #555;
-    padding-bottom: 8px;
-    cursor: pointer;
-    position: relative;
-
-    &.active {
-      color: #6c63ff;
-      font-weight: 600;
-      border-bottom: 2px solid #6c63ff;
-    }
-
-    span {
-      background: #f0f0ff;
-      color: #6c63ff;
-      border-radius: 10px;
-      padding: 1px 6px;
-      font-size: 0.75rem;
-      margin-left: 4px;
-    }
-  }
-}
-
-.filter-box {
-  display: flex;
-  align-items: flex-end;
-  gap: 1rem;
-  background: #fff;
-  padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-  margin-bottom: 1rem;
-
-  .filter-item {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-
-    label {
-      font-size: 0.85rem;
-      color: #666;
-    }
-
-    select {
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      padding: 6px 10px;
-      width: 160px;
-    }
-  }
-
-  .filter-buttons {
-    margin-left: auto;
-    display: flex;
-    gap: 0.5rem;
-
-    .btn-apply {
-      background: #6c63ff;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 8px 14px;
-    }
-
-    .btn-clear {
-      border: 1px solid #ddd;
-      background: white;
-      color: #333;
-      border-radius: 6px;
-      padding: 8px 14px;
-    }
-  }
-}
-
-.table-section {
-  background: white;
-  border-radius: 8px;
-  padding: 1rem;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-
-  .table-header {
+  .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 15px;
 
-    .table-actions {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #333;
+    }
 
-      .btn-outline {
-        border: 1px solid #6c63ff;
-        color: #6c63ff;
-        background: #fff;
-        border-radius: 6px;
+    .tabs {
+      a {
+        text-decoration: none;
+        margin: 0 10px;
         padding: 6px 12px;
-        cursor: pointer;
+        border-radius: 6px;
+        color: #555;
+        font-weight: 500;
+        transition: 0.3s;
+
+        &.active {
+          background: #6c63ff;
+          color: white;
+        }
+
+        &:hover {
+          color: #6c63ff;
+        }
       }
     }
   }
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-
-    th, td {
-      text-align: left;
-      padding: 10px 12px;
-      border-bottom: 1px solid #f0f0f0;
-    }
-
-    .cust-info {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-
-      .avatar {
-        background: #6c63ff;
-        color: white;
-        border-radius: 50%;
-        width: 28px;
-        height: 28px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-weight: 600;
-      }
-    }
-
-    .status {
-      border-radius: 10px;
-      padding: 3px 10px;
-      font-size: 0.85rem;
-      font-weight: 500;
-
-      &.confirmed {
-        background: #e6fffb;
-        color: #08979c;
-      }
-      &.pending {
-        background: #fff7e6;
-        color: #d48806;
-      }
-      &.cancelled {
-        background: #fff1f0;
-        color: #cf1322;
-      }
-    }
-
-    .actions {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-
-  button {
-    border: none;
-    padding: 6px 10px;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: 0.2s;
-  }
-
-  .btn-view {
-    background: #e6e6ff;
-    color: #4c49ff;
-  }
-
-  .btn-confirm {
-    background: #22c55e;
-    color: white;
-  }
-
-  .btn-cancel {
-    background: #f87171;
-    color: white;
-  }
-
-  .btn-call {
-    background: #60a5fa;
-    color: white;
-  }
-
-  .btn-msg {
-    background: #a855f7;
-    color: white;
-  }
-
-  button:hover {
-    opacity: 0.85;
-  }
-}
-  }
-
-  .no-data {
-    text-align: center;
-    padding: 20px;
-    color: #999;
+  .content {
+    margin-top: 20px;
   }
 }

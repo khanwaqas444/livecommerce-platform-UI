@@ -1,0 +1,47 @@
+.detail-page {
+  padding: 1.5rem;
+
+  .back-btn {
+    background: none;
+    border: none;
+    color: #6c63ff;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+  }
+
+  .detail-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    padding: 1.2rem;
+    line-height: 1.7;
+
+    p {
+      margin: 6px 0;
+      strong {
+        color: #444;
+        width: 120px;
+        display: inline-block;
+      }
+    }
+
+    .status {
+      padding: 3px 8px;
+      border-radius: 6px;
+      &.confirmed { background: #e7f9ed; color: #1b8834; }
+      &.pending { background: #fff5d6; color: #c49600; }
+      &.cancelled { background: #fde8e8; color: #cc0d0d; }
+    }
+  }
+
+  .loading {
+    text-align: center;
+    color: #777;
+  }
+}

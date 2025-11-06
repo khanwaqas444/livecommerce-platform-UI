@@ -1,0 +1,143 @@
+.calendar-page {
+  background: #f8f9fb;
+  min-height: 100vh;
+  padding: 0 1.5rem 1.5rem 1.5rem;
+  font-family: 'Inter', sans-serif;
+}
+
+
+
+.calendar-header {
+  background: #fff;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #e5e7eb;
+  margin: -1.5rem -1.5rem 1rem -1.5rem; 
+  display: flex;
+  align-items: center;
+  height: 60px;
+
+  .breadcrumbs {
+    font-size: 0.95rem;
+    color: #6b7280;
+
+    span {
+      color: #9ca3af;
+    }
+
+    strong {
+      color: #111827;
+      font-weight: 500;
+    }
+  }
+}
+
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.2rem;
+
+  .toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .month-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    select {
+      border: 1.5px solid #d1d5db;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border 0.2s;
+      cursor: pointer;
+
+      &:focus {
+        border-color: #6c63ff;
+      }
+    }
+  }
+
+  .toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    .nav-buttons {
+      display: flex;
+      gap: 0.4rem;
+    }
+
+    button {
+      border: none;
+      outline: none;
+      background: #fff;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease;
+
+      &.btn-today {
+        background: #6c63ff;
+        color: #fff;
+      }
+
+      &.btn-view.active {
+        background: #e0e7ff;
+        color: #4338ca;
+      }
+
+      &:hover {
+        background: #f3f4f6;
+      }
+    }
+
+    .btn-set {
+      border: 1.5px solid #6c63ff;
+      color: #6c63ff;
+      background: transparent;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      cursor: pointer;
+
+      &:hover {
+        background: #f3f4ff;
+      }
+    }
+  }
+}
+
+.calendar-container {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+
+  ::ng-deep .fc {
+    font-family: 'Inter', sans-serif;
+    color: #374151;
+
+    .fc-daygrid-day-number {
+      font-weight: 500;
+    }
+
+    .fc-event {
+      border-radius: 6px;
+      font-size: 0.8rem;
+      padding: 2px 6px;
+    }
+  }
+}

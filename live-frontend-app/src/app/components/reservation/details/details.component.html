@@ -1,0 +1,26 @@
+<div class="detail-page" *ngIf="!loading; else loadingTpl">
+  <button class="back-btn" (click)="backToList()">← Back to Reservations</button>
+
+  <h2>Reservation Details</h2>
+
+  <div *ngIf="reservation; else notFound">
+    <div class="detail-card">
+      <p><strong>Booking ID:</strong> #{{ reservation.id }}</p>
+      <p><strong>Customer:</strong> {{ reservation.customerName }}</p>
+      <p><strong>Phone:</strong> {{ reservation.phone || reservation.customerPhone }}</p>
+      <p><strong>Product:</strong> {{ reservation.product || reservation.productName }}</p>
+      <p><strong>Date:</strong> {{ reservation.date || reservation.reservationDate | date: 'mediumDate' }}</p>
+      <p><strong>Time:</strong> {{ reservation.time }}</p>
+      <p><strong>Status:</strong> <span class="status {{ reservation.status?.toLowerCase() }}">{{ reservation.status }}</span></p>
+      <p><strong>Notes:</strong> {{ reservation.notes || 'No notes added' }}</p>
+    </div>
+  </div>
+
+  <ng-template #notFound>
+    <p>Reservation not found.</p>
+  </ng-template>
+</div>
+
+<ng-template #loadingTpl>
+  <div class="loading">Loading reservation details...</div>
+</ng-template>

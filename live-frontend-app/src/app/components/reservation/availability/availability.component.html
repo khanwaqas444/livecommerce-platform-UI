@@ -1,0 +1,129 @@
+<div class="availability-wrapper">
+  <!-- ✅ Top Action Buttons -->
+  <div class="top-bar">
+    <button class="btn cancel">Cancel</button>
+    <div class="right-buttons">
+      <button class="btn draft">Save as Draft</button>
+      <button class="btn primary" (click)="saveSettings()">Save Availability Settings</button>
+    </div>
+  </div>
+
+  <!-- 💡 Tip Section -->
+  <div class="tip">
+    <strong>💡 Tip:</strong> Make sure to set realistic time slots that give you enough time to serve each customer. You can always adjust these settings later.
+  </div>
+
+  <!-- 🕒 Business Hours -->
+  <section class="card">
+    <h3 class="section-title">Business Hours</h3>
+    <p class="section-desc">Set your shop's opening hours for each day of the week</p>
+
+    <div class="days-list">
+      <div *ngFor="let day of days" class="day-item" [class.disabled]="!day.enabled">
+        <div class="day-header">
+          <label class="day-checkbox">
+            <input type="checkbox" [(ngModel)]="day.enabled" />
+            <span>{{ day.name }}</span>
+          </label>
+          <span *ngIf="!day.enabled" class="closed-text">Closed</span>
+        </div>
+
+        <div class="day-times" *ngIf="day.enabled">
+          <div class="time-field">
+            <label>Opening Time</label>
+            <input type="time" [(ngModel)]="day.openingTime" />
+          </div>
+          <div class="time-field">
+            <label>Closing Time</label>
+            <input type="time" [(ngModel)]="day.closingTime" />
+          </div>
+          <button class="add-break">+ Add Break Time (Lunch)</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⚙️ Slot Configuration -->
+  <section class="card">
+    <h3 class="section-title">Slot Configuration</h3>
+    <p class="section-desc">Configure how customer bookings are scheduled</p>
+
+    <div class="slot-grid">
+      <div class="field">
+        <label>Slot Duration</label>
+        <select [(ngModel)]="slotConfig.duration">
+          <option *ngFor="let d of durations" [value]="d">{{ d }} minutes</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Capacity per Slot</label>
+        <input type="number" [(ngModel)]="slotConfig.capacity" />
+      </div>
+
+      <div class="field">
+        <label>Buffer Time Between Slots</label>
+        <input type="number" [(ngModel)]="slotConfig.buffer" /> minutes
+      </div>
+
+      <div class="field">
+        <label>Advance Booking</label>
+        <input type="number" [(ngModel)]="slotConfig.advanceDays" /> days
+      </div>
+
+      <div class="field">
+        <label>Minimum Notice</label>
+        <input type="number" [(ngModel)]="slotConfig.minNotice" /> hours
+      </div>
+
+      <div class="field switch-field">
+        <label>Same-day Booking</label>
+        <label class="switch">
+          <input type="checkbox" [(ngModel)]="slotConfig.sameDay" />
+          <span class="slider"></span>
+        </label>
+        <small>Allow customers to book today</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🚫 Blocked Dates -->
+  <section class="card">
+    <h3 class="section-title">Blocked Dates (Holidays)</h3>
+    <p class="section-desc">Mark dates when your shop will be closed</p>
+
+    <div class="blocked-dates">
+      <div *ngFor="let b of blockedDates; let i = index" class="blocked-item">
+        <div class="date-field">
+          <input type="date" [(ngModel)]="b.date" />
+        </div>
+        <div class="reason-field">
+          <input type="text" [(ngModel)]="b.reason" placeholder="Reason (e.g., Holiday, Personal)" />
+        </div>
+        <button class="btn delete" (click)="removeBlockedDate(i)">Delete</button>
+      </div>
+
+      <div class="add-blocked">
+        <button class="btn add" (click)="addBlockedDate()">+ Add Holiday</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🔍 Preview Slots -->
+  <section class="card">
+    <h3 class="section-title">Preview Generated Slots</h3>
+    <p class="section-desc">See how your availability will look to customers</p>
+
+    <button class="btn preview" (click)="previewGeneratedSlots()">Generate Preview</button>
+
+    <div class="slot-preview" *ngIf="generatedSlots.length">
+      <div class="slots">
+        <div *ngFor="let slot of generatedSlots" class="slot-card" [class.unavailable]="!slot.available">
+          <strong>{{ slot.time }}</strong>
+          <small *ngIf="slot.available">2 spots available</small>
+          <small *ngIf="!slot.available">Unavailable</small>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

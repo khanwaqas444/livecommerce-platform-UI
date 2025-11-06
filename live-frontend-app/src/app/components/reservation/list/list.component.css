@@ -1,0 +1,165 @@
+.reservations-page {
+  font-family: 'Poppins', sans-serif;
+  color: #222;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-box input {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 8px 12px;
+  width: 300px;
+}
+
+.calendar-btn {
+  background: linear-gradient(90deg, #6650f6, #8b6dfb);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+.tabs {
+  display: flex;
+  gap: 16px;
+  margin: 16px 0;
+}
+
+.tabs button {
+  background: none;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  color: #666;
+}
+
+.tabs button.active {
+  color: #6b4efb;
+  font-weight: 600;
+}
+
+.filter-card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.filters {
+  display: flex;
+  gap: 20px;
+}
+
+.filter label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.filter select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.apply-btn {
+  background: linear-gradient(90deg, #6b4efb, #8b6dfb);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+}
+
+.clear-btn {
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 8px;
+  padding: 8px 16px;
+}
+
+.table-card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.table-actions button {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.reminder-btn {
+  background: linear-gradient(90deg, #6b4efb, #8b6dfb);
+  color: white;
+}
+
+.export-btn {
+  border: 1px solid #ccc;
+  background: #fff;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.cust-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  background: #6b4efb;
+  color: white;
+  font-weight: 600;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status.confirmed { background: #e7f7ef; color: #1a9e62; padding: 4px 10px; border-radius: 6px; }
+.status.pending { background: #fff6e5; color: #d89b02; padding: 4px 10px; border-radius: 6px; }
+.status.cancelled { background: #ffe9e9; color: #d33; padding: 4px 10px; border-radius: 6px; }
+
+.actions button {
+  border: none;
+  border-radius: 8px;
+  padding: 6px 10px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.view-btn { background: #6650f6; color: #fff; }
+.confirm-btn { background: #00b96b; color: #fff; }
+.cancel-btn { background: #ff4d4f; color: #fff; }

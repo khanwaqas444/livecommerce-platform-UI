@@ -1,0 +1,49 @@
+<!-- calendar.component.html -->
+<div class="calendar-page">
+    <!-- simplified header -->
+    <div class="calendar-header">
+        <div class="reservation-header">
+            <span class="breadcrumb">Reservations ›</span>
+            <span class="current">Calendar</span>
+        </div>
+
+    </div>
+
+
+    <!-- toolbar -->
+    <div class="toolbar">
+        <div class="toolbar-left">
+            <h2 class="month-title">{{ calendarTitle }}</h2>
+            <select [(ngModel)]="selectedStatus" (change)="filterEvents()">
+                <option value="ALL">All Status</option>
+                <option value="CONFIRMED">Confirmed</option>
+                <option value="PENDING">Pending</option>
+                <option value="COMPLETED">Completed</option>
+                <option value="CANCELLED">Cancelled</option>
+                <option value="NO_SHOW">No-show</option>
+            </select>
+        </div>
+
+        <div class="toolbar-right">
+            <div class="nav-buttons">
+                <button class="btn-nav" (click)="goPrev()">◀</button>
+                <button class="btn-today" (click)="goToToday()">Today</button>
+                <button class="btn-nav" (click)="goNext()">▶</button>
+            </div>
+
+            <div class="view-buttons">
+                <button routerLink="/reservations/calendar" routerLinkActive="active" class="btn-view">Calendar</button>
+                <button class="btn-set" (click)="goToListPage()">List</button>
+
+                <button class="btn-view">Timeline</button>
+            </div>
+
+            <button class="btn-set" (click)="goToAvailabilityPage()">⚙️ Set Availability</button>
+        </div>
+    </div>
+
+    <!-- calendar -->
+    <div class="calendar-container">
+        <full-calendar #calendarComponent [options]="calendarOptions"></full-calendar>
+    </div>
+</div>
