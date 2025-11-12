@@ -1,37 +1,75 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
+import { Product } from './product.model';
+
+export interface InternalNote {
+  author: string;
+  message: string;
+  timeAgo: string;
+}
+
+export interface TimelineStep {
+  label: string;
+  time?: string | null; // 👈 allow null here
+  done: boolean;
+  cancelled?: boolean;
+}
+
 
 export interface Reservation {
-   id?: number;                 
-  bookingId?: string;            
+  id?: number;
+  bookingId?: string;
+
+  // Core reservation info
   customerName?: string;
-  customerPhone?: string;      
+  customerPhone?: string;
   customerEmail?: string;
-  productName?: string;           
-  date?: string;       
-  people?: number;    
-  startTime?: string; 
-  endTime?: string;      
-  time?: string;                 
-  status?: string;                
-  notes?: string;
+
+  date?: string;
+  reservationDate?: string;
+  startTime?: string;
+  endTime?: string;
+  time?: string;
+  people?: number;
   totalGuests?: number;
-  createdAt?: string;
-  updatedAt?: string;
+  productIds?: number[];
+
+  // Product and pricing
+  productName?: string;   // ✅ add this back
+  products?: Product[]; 
+  totalValue?: number;
+
+  // Status / meta
+  status?: string;
+  notes?: string;
+  createdAt?: string | null;
+  updatedAt?: string | null;
+  confirmedAt?: string | null;
+  reminderSentAt?: string | null;
   deleted?: boolean;
-  selected?: boolean;            
-  reservationDate?: string; 
+  selected?: boolean;     // ✅ add this back
+  internalNotes?: InternalNote[];
 }
+
 
 export interface ManualReservationRequest {
   customerName: string;
-  phone: string;
-  product: string;
-  date: string;
-  time: string;
-  notes?: string;
+  customerPhone: string;
+  customerEmail?: string;
+
+  reservationDate: string;        // ISO yyyy-MM-dd
+  timeSlot: string;               // "10:00-10:30"
+  people: number;
+
+  bookingSource: string;          // manual / walk-in / phone / stream
+  productIds?: number[];
+
+  specialRequests?: string;
+  autoConfirm?: boolean;
 }
+
+
 
 export interface NotesRequest {
   notes: string;
@@ -79,9 +117,9 @@ export class ReservationService {
     return this.http.post<Reservation>(this.baseUrl, reservation);
   }
 
-  createManualReservation(req: ManualReservationRequest): Observable<Reservation> {
-    return this.http.post<Reservation>(`${this.baseUrl}/manual`, req);
-  }
+  createManualReservation(req: any): Observable<Reservation> {
+  return this.http.post<Reservation>(`${this.baseUrl}/manual`, req);
+}
 
   // ----------------------------------
   // List / Search / Summary
@@ -106,28 +144,28 @@ export class ReservationService {
   }
 
   // ----------------------------------
-  // Details / Update / Status / Notes
-  // ----------------------------------
-  getReservationById(id: number): Observable<Reservation> {
-    return this.http.get<Reservation>(`${this.baseUrl}/${id}`);
-  }
+// Details / Update / Status / Notes
+// ----------------------------------
+getReservationById(id: string): Observable<Reservation> {
+  return this.http.get<Reservation>(`${this.baseUrl}/${id}`);
+}
 
-  updateReservation(id: number, reservation: Reservation): Observable<Reservation> {
-    return this.http.put<Reservation>(`${this.baseUrl}/${id}`, reservation);
-  }
+updateReservation(id: string, reservation: Reservation): Observable<Reservation> {
+  return this.http.put<Reservation>(`${this.baseUrl}/${id}`, reservation);
+}
 
-  updateStatus(id: number, status: string): Observable<Reservation> {
-    return this.http.put<Reservation>(`${this.baseUrl}/${id}/status`, null, { params: { status } });
-  }
+updateStatus(id: string, status: string): Observable<Reservation> {
+  return this.http.put<Reservation>(`${this.baseUrl}/${id}/status`, null, { params: { status } });
+}
 
-  performAction(id: number, action: string): Observable<Reservation> {
-    return this.http.put<Reservation>(`${this.baseUrl}/${id}/action`, null, { params: { action } });
-  }
+performAction(id: string, action: string): Observable<Reservation> {
+  return this.http.put<Reservation>(`${this.baseUrl}/${id}/action`, null, { params: { action } });
+}
 
-  updateNotes(id: number, notes: string): Observable<Reservation> {
-    const body: NotesRequest = { notes };
-    return this.http.put<Reservation>(`${this.baseUrl}/${id}/notes`, body);
-  }
+updateNotes(id: string, notes: string): Observable<Reservation> {
+  const body: NotesRequest = { notes };
+  return this.http.put<Reservation>(`${this.baseUrl}/${id}/notes`, body);
+}
 
   // ----------------------------------
   // Calendar

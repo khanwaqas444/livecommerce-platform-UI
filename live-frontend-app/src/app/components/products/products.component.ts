@@ -72,4 +72,18 @@ export class ProductsComponent implements OnInit {
       error: (err) => console.error('Error adding product:', err)
     });
   }
+
+  // For image fallback and relative path fix
+getFullImageUrl(imageUrl?: string): string {
+  if (!imageUrl) return 'assets/images/no-image.png';
+  if (imageUrl.startsWith('http')) return imageUrl;
+  return `http://localhost:8082${imageUrl.startsWith('/') ? imageUrl : '/' + imageUrl}`;
+}
+
+// For image loading error
+onImgError(event: Event) {
+  const img = event.target as HTMLImageElement;
+  img.src = 'assets/images/no-image.png';
+}
+
 }

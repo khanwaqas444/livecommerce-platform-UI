@@ -8,6 +8,7 @@ import { LiveStreamsComponent } from './components/live-streams/live-streams.com
 import { AnalyticsComponent } from './components/analytics/analytics.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { ListComponent } from './components/reservation/list/list.component';
+import { ReservationDetailComponent } from './components/reservation/details/details.component';
 
 export const routes: Routes = [
   {
@@ -49,7 +50,7 @@ export const routes: Routes = [
             path: 'details/:id',
             loadComponent: () =>
               import('./components/reservation/details/details.component')
-                .then(m => m.DetailsComponent),
+                .then(m => m.ReservationDetailComponent),
           },
           {
             path: 'manual',
@@ -59,8 +60,7 @@ export const routes: Routes = [
           },
         ],
       },
-
-{ path: 'reservations', component: ListComponent },
+      
       { path: 'products', component: ProductsComponent },
       { path: 'products/:id', component: ProductDetailComponent },
       { path: 'streams', component: LiveStreamsComponent },

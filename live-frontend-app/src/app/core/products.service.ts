@@ -1,19 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface Product {
-  id?: number;
-  name: string;
-  description: string;
-  price: number;
-  category: string;
-  live: boolean;
-  stock: number;
-  imageUrl?: string;
-  createdAt?: string;
-  updatedAt?: string;
-}
+import { Product } from './product.model'; // ✅ import from model only
 
 @Injectable({
   providedIn: 'root'
@@ -36,8 +24,10 @@ export class ProductService {
     return this.http.post<Product>(this.apiUrl, formData);
   }
 
+  // Get product by ID
   getProductById(id: number): Observable<Product> {
-  return this.http.get<Product>(`${this.apiUrl}/${id}`);
+    return this.http.get<Product>(`${this.apiUrl}/${id}`);
+  }
 }
+export type { Product };
 
-}

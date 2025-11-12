@@ -124,4 +124,10 @@ export class CalendarComponent implements OnInit {
    goToListPage() {
     this.router.navigate(['/reservations/list']);
   }
+
+  goToManualPage() {
+  this.router.navigate(['/reservations/manual']);
+}
+
+
 }

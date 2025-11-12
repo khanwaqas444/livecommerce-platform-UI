@@ -171,10 +171,6 @@ updateStatus(reservation: any, status: string): void {
   });
 }
 
-
-
-
-
   // 📞 Contact
   callCustomer(phone: string): void {
     window.open(`tel:${phone}`);
@@ -185,9 +181,12 @@ updateStatus(reservation: any, status: string): void {
   }
 
   // 👁️ View details
-  viewReservation(bookingId?: string): void {
-    if (bookingId) this.router.navigate(['/reservations', bookingId]);
+ viewReservation(bookingId?: string): void {
+  if (bookingId) {
+    console.log('🔗 Navigating to details:', bookingId);
+    this.router.navigate(['/reservations/details', bookingId]);
   }
+}
 
   // 🔑 TrackBy
   trackByBookingId(index: number, item: Reservation): string {

@@ -103,7 +103,7 @@
           </td>
           <td>
             {{ (r.reservationDate || r.createdAt) | date:'MMM d, y' }} <br />
-            <small>{{ r.startTime || '-' }} - {{ r.endTime || '-' }}</small>
+            <small>{{ r.startTime || '' }}  {{ r.endTime || '' }}</small>
           </td>
           <td>{{ r.productName }}</td>
           <td>{{ r.people }}</td>

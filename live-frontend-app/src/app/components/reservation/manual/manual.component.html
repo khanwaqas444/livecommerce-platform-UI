@@ -1,1 +1,188 @@
-<p>manual works!</p>
+<div class="page">
+  <!-- Top breadcrumb & title -->
+  <div class="header">
+    <div class="crumbs">Reservations · <span>Create Manual Reservation</span></div>
+    <h1>Create Manual Reservation</h1>
+    <div class="note">
+      <span class="dot">i</span>
+      Manual reservations are automatically confirmed. Customer will receive
+      SMS/WhatsApp confirmation if you enable it below.
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- LEFT STACK -->
+    <div class="left">
+      <!-- Customer Details -->
+      <section class="card">
+        <div class="card-title">
+          <span class="pill"></span>
+          Customer Details
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label>Full Name *</label>
+            <input type="text" [(ngModel)]="form.customerName" placeholder="Enter customer name" />
+          </div>
+
+          <div class="field">
+            <label>Phone Number *</label>
+            <input type="text" [(ngModel)]="form.customerPhone" placeholder="+91 98765 43210" />
+          </div>
+
+          <div class="field">
+            <label>Email Address (Optional)</label>
+            <input type="email" [(ngModel)]="form.customerEmail" placeholder="customer@email.com" />
+          </div>
+
+          <div class="field">
+            <label>Number of People</label>
+            <input type="number" min="1" [(ngModel)]="form.people" />
+          </div>
+        </div>
+      </section>
+
+      <!-- Reservation Details -->
+      <section class="card">
+        <div class="card-title">
+          <span class="pill"></span>
+          Reservation Details
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label>Select Date *</label>
+            <input type="date" [(ngModel)]="form.reservationDate" />
+          </div>
+
+          <div class="field">
+            <label>Time Slot *</label>
+            <input type="time" [(ngModel)]="form.timeSlot" />
+          </div>
+        </div>
+
+        <div class="actions-row">
+          <button class="btn ghost" (click)="cancel()">Cancel</button>
+          <div class="gap"></div>
+          <button class="btn primary" (click)="createReservation()" [disabled]="isCreateDisabled">
+            {{ loading ? 'Creating…' : 'Create Reservation' }}
+          </button>
+        </div>
+      </section>
+
+      <!-- Product Selection -->
+      <section class="card">
+        <div class="card-title">
+          <span class="pill"></span>
+          Product Selection (Optional)
+        </div>
+
+        <div class="search">
+          <input type="text" [(ngModel)]="search" (input)="onSearch()" placeholder="Search products by name or price…" />
+        </div>
+
+        <div class="product-list">
+          <label
+            class="product-row"
+            *ngFor="let p of filtered"
+            [class.selected]="isSelected(p.id)"
+          >
+            <input type="checkbox" [checked]="isSelected(p.id)" (change)="toggleProduct(p.id)" />
+            <img class="thumb" [src]="p.imageUrl || 'https://via.placeholder.com/56x56?text=%20'" alt="" />
+            <div class="info">
+              <div class="name">{{ p.name }}</div>
+              <div class="meta">
+                <span class="price">{{ p.price | currency:'INR':'symbol':'1.0-0' }}</span>
+              </div>
+            </div>
+          </label>
+        </div>
+
+        <div class="chips" *ngIf="selectedProducts.length">
+          <span class="chip" *ngFor="let sp of selectedProducts">
+            {{ sp.name }}
+          </span>
+        </div>
+      </section>
+
+      <!-- Additional Information -->
+      <section class="card">
+        <div class="card-title">
+          <span class="pill"></span>
+          Additional Information
+        </div>
+
+        <div class="field">
+          <label>Special Requests (Optional)</label>
+          <textarea rows="3" [(ngModel)]="form.specialRequests" placeholder="Any specific requirements from the customer?"></textarea>
+        </div>
+
+        <div class="field">
+          <label>Internal Notes (Optional)</label>
+          <textarea rows="3" [(ngModel)]="form.internalNotes" placeholder="Private notes (not visible to customer)"></textarea>
+        </div>
+      </section>
+
+      <!-- Confirmation Settings -->
+      <section class="card">
+        <div class="card-title">
+          <span class="pill"></span>
+          Confirmation Settings
+        </div>
+
+        <label class="tick">
+          <input type="checkbox" [(ngModel)]="sendSms" />
+          <span>Send SMS Confirmation</span>
+        </label>
+        <label class="tick">
+          <input type="checkbox" [(ngModel)]="sendWhatsapp" />
+          <span>Send WhatsApp Confirmation</span>
+        </label>
+        <label class="tick">
+          <input type="checkbox" [(ngModel)]="sendEmail" />
+          <span>Send Email Confirmation</span>
+        </label>
+      </section>
+    </div>
+
+    <!-- RIGHT SUMMARY -->
+    <div class="right">
+      <section class="card summary">
+        <div class="card-title">
+          <span class="pill"></span>
+          Reservation Summary
+        </div>
+
+        <div class="sum-row">
+          <span>Customer Name</span>
+          <span>{{ form.customerName || '-' }}</span>
+        </div>
+        <div class="sum-row">
+          <span>Phone Number</span>
+          <span>{{ form.customerPhone || '-' }}</span>
+        </div>
+        <div class="sum-row">
+          <span>Date & Time</span>
+          <span>{{ form.reservationDate || '-' }} {{ form.timeSlot || '' }}</span>
+        </div>
+        <div class="sum-row">
+          <span>Number of People</span>
+          <span>{{ form.people }}</span>
+        </div>
+        <div class="sum-row">
+          <span>Products Selected</span>
+          <span>{{ selectedProducts.length || 0 }}</span>
+        </div>
+        <div class="sum-row total">
+          <span>Estimated Value</span>
+          <span>{{ estimatedValueInr | currency:'INR':'symbol':'1.0-0' }}</span>
+        </div>
+
+        <div class="status">
+          <span class="dot green"></span> Auto-Confirmed
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

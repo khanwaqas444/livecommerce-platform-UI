@@ -1,24 +1,147 @@
-<div class="detail-page" *ngIf="!loading; else loadingTpl">
-  <button class="back-btn" (click)="backToList()">← Back to Reservations</button>
+<div class="reservation-detail" *ngIf="!loading && reservation; else loadingTpl">
 
-  <h2>Reservation Details</h2>
-
-  <div *ngIf="reservation; else notFound">
-    <div class="detail-card">
-      <p><strong>Booking ID:</strong> #{{ reservation.id }}</p>
-      <p><strong>Customer:</strong> {{ reservation.customerName }}</p>
-      <p><strong>Phone:</strong> {{ reservation.phone || reservation.customerPhone }}</p>
-      <p><strong>Product:</strong> {{ reservation.product || reservation.productName }}</p>
-      <p><strong>Date:</strong> {{ reservation.date || reservation.reservationDate | date: 'mediumDate' }}</p>
-      <p><strong>Time:</strong> {{ reservation.time }}</p>
-      <p><strong>Status:</strong> <span class="status {{ reservation.status?.toLowerCase() }}">{{ reservation.status }}</span></p>
-      <p><strong>Notes:</strong> {{ reservation.notes || 'No notes added' }}</p>
+  <!-- HEADER -->
+  <div class="top-header">
+    <div>
+      <h2>Reservation #{{ reservation?.bookingId }}</h2>
+      <p>Created on {{ reservation?.createdAt | date:'medium' }}</p>
+    </div>
+    <div class="actions">
+      <button class="btn edit" (click)="editReservation()">✏️ Edit</button>
+      <button class="btn print" (click)="printReservation()">🖨️ Print</button>
     </div>
   </div>
 
-  <ng-template #notFound>
-    <p>Reservation not found.</p>
-  </ng-template>
+  <!-- STATUS -->
+  <div class="status-bar" [ngClass]="reservation?.status?.toLowerCase()">
+    <span class="dot"></span> {{ reservation?.status || 'Confirmed' }}
+  </div>
+
+  <!-- UPCOMING NOTICE -->
+  <div class="alert upcoming">
+    <strong>📅 Upcoming Reservation</strong>
+    <p>This reservation is scheduled for tomorrow at {{ reservation?.startTime }}. Make sure the customer receives a reminder.</p>
+  </div>
+
+  <div class="main-grid">
+    <!-- LEFT SIDE -->
+    <div class="left">
+
+      <!-- BOOKING INFO -->
+      <div class="card">
+        <h3>Booking Information</h3>
+        <div class="grid-info">
+          <div><strong>Booking ID:</strong> #{{ reservation?.bookingId }}</div>
+          <div><strong>Booking Source:</strong> Live Stream</div>
+          <div><strong>Date:</strong> {{ reservation?.date | date:'mediumDate' }}</div>
+          <div><strong>Time Slot:</strong> {{ reservation?.startTime }} - {{ reservation?.endTime }}</div>
+          <div><strong>Duration:</strong> 30 minutes</div>
+          <div><strong>Number of People:</strong> {{ reservation?.people || 1 }}</div>
+        </div>
+      </div>
+
+      <!-- CUSTOMER INFO -->
+      <div class="card">
+        <h3>Customer Information</h3>
+        <div class="customer-info">
+          <div class="avatar">{{ reservation?.customerName?.charAt(0)?.toUpperCase() }}</div>
+          <div>
+            <p class="name">{{ reservation?.customerName }}</p>
+            <p class="contact">📞 {{ reservation?.customerPhone }}</p>
+            <p class="email">{{ reservation?.customerEmail }}</p>
+          </div>
+        </div>
+        <div class="special-request" *ngIf="reservation?.notes">
+          <div class="tag">Special Requests</div>
+          <p>{{ reservation?.notes }}</p>
+        </div>
+      </div>
+
+      <!-- PRODUCTS -->
+      <div class="product" *ngFor="let p of reservation?.products">
+  <img [src]="p.imageUrl" alt="Product" />
+  <div>
+    <p class="product-name">{{ p.name }}</p>
+    <p class="product-desc">{{ p.description }}</p>
+    <p class="price">₹{{ p.price | number }}</p>
+  </div>
+</div>
+
+
+
+      <!-- TIMELINE -->
+<div class="card">
+  <h3>Timeline</h3>
+  <ul class="timeline">
+    <li *ngFor="let step of getTimelineSteps()" 
+        [ngClass]="{ done: step.done, cancelled: step.cancelled }">
+      <span class="circle"></span>
+      <div>
+        <strong>{{ step.label }}</strong>
+        <p *ngIf="step.time">{{ step.time | date:'medium' }}</p>
+        <p *ngIf="!step.time && !step.cancelled && !step.done" class="pending-text">
+          Pending
+        </p>
+        <p *ngIf="step.done && !step.time && !step.cancelled" class="done-text">
+          Completed
+        </p>
+        <p *ngIf="step.cancelled" class="cancel-text">Reservation Cancelled</p>
+      </div>
+    </li>
+  </ul>
+</div>
+
+
+      <!-- INTERNAL NOTES -->
+      <div class="card">
+        <h3>Internal Notes</h3>
+        <div *ngIf="reservation?.internalNotes?.length; else noNotes">
+          <div *ngFor="let n of reservation?.internalNotes" class="note">
+            <p><strong>{{ n.author }}</strong> <span>{{ n.timeAgo }}</span></p>
+            <p>{{ n.message }}</p>
+          </div>
+        </div>
+        <ng-template #noNotes>
+          <p>No internal notes yet.</p>
+        </ng-template>
+        <textarea [(ngModel)]="newNote" placeholder="Add a note about this customer or reservation..."></textarea>
+        <button class="add-btn" (click)="addNote()">Add Note</button>
+      </div>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="right">
+      <!-- QR -->
+      <div class="card qr-section">
+        <h3>Customer Check-in</h3>
+        <div class="qr-box"></div>
+        <p>Customer will show this QR code when they arrive</p>
+        <button class="scan-btn">Scan QR Code</button>
+      </div>
+
+      <!-- QUICK ACTIONS -->
+      <div class="card quick-actions">
+        <h3>Quick Actions</h3>
+        <button class="call" (click)="performAction('call')">📞 Call Customer</button>
+        <button class="whatsapp" (click)="performAction('whatsapp')">💬 Send WhatsApp Message</button>
+        <button class="remind" (click)="performAction('reminder')">🔔 Send Reminder</button>
+        <button class="reschedule" (click)="performAction('reschedule')">📅 Reschedule</button>
+        <button class="arrived" (click)="updateStatus('ARRIVED')">✅ Mark as Arrived</button>
+        <button class="completed" (click)="updateStatus('COMPLETED')">✔️ Mark as Completed</button>
+        <button class="no-show" (click)="updateStatus('NO_SHOW')">⚠️ Mark as No-Show</button>
+        <button class="cancel" (click)="updateStatus('CANCELLED')">❌ Cancel Reservation</button>
+      </div>
+
+      <!-- HISTORY -->
+      <div class="card customer-history">
+        <h3>Customer History</h3>
+        <p><strong>Total Visits:</strong> 3</p>
+        <p><strong>Total Purchases:</strong> 2</p>
+        <p><strong>Last Visit:</strong> Dec 15, 2024</p>
+        <p><strong>Customer Since:</strong> Oct 2024</p>
+      </div>
+    </div>
+  </div>
 </div>
 
 <ng-template #loadingTpl>
