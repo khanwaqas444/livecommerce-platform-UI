@@ -1,1 +1,83 @@
-<p>live-streams works!</p>
+<div class="page-wrap">
+
+  <div class="header">
+    <div>
+      <h1>Live Streams</h1>
+      <p class="muted">Manage streams, setup broadcast and view analytics</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn" (click)="show('setup')">Schedule / Setup Stream</button>
+      <button class="btn outline" (click)="show('recordings')">Recordings</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button (click)="show('list')" [class.active]="currentView==='list'">Past Streams</button>
+    <button (click)="show('setup')" [class.active]="currentView==='setup'">Setup</button>
+    <button (click)="show('analytics')" [class.active]="currentView==='analytics'">Analytics</button>
+    <button (click)="show('recordings')" [class.active]="currentView==='recordings'">Recordings</button>
+  </div>
+
+  <div class="content">
+
+    <!-- List / Default View -->
+    <section *ngIf="currentView === 'list'">
+      <div class="stats-row">
+        <div class="stat"> <div class="num">{{ stats.totalStreams }}</div><div class="label">Total Streams</div></div>
+        <div class="stat"> <div class="num">{{ stats.watchHours }}</div><div class="label">Watch Hours</div></div>
+        <div class="stat"> <div class="num">{{ stats.avgViewers }}</div><div class="label">Avg Viewers</div></div>
+        <div class="stat"> <div class="num">{{ stats.reservations }}</div><div class="label">Reservations</div></div>
+      </div>
+
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>Stream</th><th>Date & Duration</th><th>Peak</th><th>Views</th><th>Products</th><th>Reservations</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let s of streams">
+              <td>
+                <div class="title">{{ s.title || 'Untitled' }}</div>
+                <div class="muted small">{{ s.category || 'General' }}</div>
+              </td>
+              <td>
+                <div>{{ s.startedAt ? (s.startedAt | date:'MMM d, y') : '--' }}</div>
+                <div class="muted small">{{ formatDuration(s.startedAt, s.endedAt) }}</div>
+              </td>
+              <td>{{ s.peakViewers || 0 }}</td>
+              <td>{{ s.totalViewers || 0 }}</td>
+              <td>{{ s.productsPinned || 0 }}</td>
+              <td>{{ s.totalOrders || 0 }}</td>
+              <td>
+                <button class="btn small" (click)="openAnalyticsFor(s.id)">Analytics</button>
+                <button class="btn small outline" (click)="show('setup')">Edit</button>
+              </td>
+            </tr>
+
+            <tr *ngIf="streams.length===0">
+              <td colspan="7" class="center muted">No streams to show.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Setup child -->
+    <section *ngIf="currentView === 'setup'">
+      <app-stream-setup></app-stream-setup>
+    </section>
+
+    <!-- Analytics child -->
+    <section *ngIf="currentView === 'analytics'">
+      <app-stream-analytics></app-stream-analytics>
+    </section>
+
+    <!-- Recordings child -->
+    <section *ngIf="currentView === 'recordings'">
+      <app-recordings></app-recordings>
+    </section>
+
+  </div>
+</div>

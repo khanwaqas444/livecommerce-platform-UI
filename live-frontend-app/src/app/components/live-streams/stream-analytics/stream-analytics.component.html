@@ -1,0 +1,23 @@
+<div class="analytics">
+  <h3>{{ stream?.title || 'Stream Analytics' }}</h3>
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="val">{{ stream.peakViewers }}</div><div class="label">Peak Viewers</div></div>
+    <div class="kpi"><div class="val">{{ stream.totalViewers }}</div><div class="label">Total Views</div></div>
+    <div class="kpi"><div class="val">{{ stream.watchHours }}</div><div class="label">Watch Hours</div></div>
+    <div class="kpi"><div class="val">{{ stream.reservations }}</div><div class="label">Reservations</div></div>
+  </div>
+
+  <div class="chart card">
+    <svg [attr.viewBox]="'0 0 600 150'" preserveAspectRatio="none">
+      <polyline [attr.points]="getPath(viewers,600,150)" fill="none" stroke="#0b69ff" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"></polyline>
+    </svg>
+  </div>
+
+  <div class="timeline card">
+    <h4>Engagement Timeline</h4>
+    <div class="event">2:15 PM — Stream Started — 45 viewers</div>
+    <div class="event">2:22 PM — Product Pinned — 89 clicks</div>
+    <div class="event">2:34 PM — Peak Viewership — 127 viewers</div>
+  </div>
+</div>

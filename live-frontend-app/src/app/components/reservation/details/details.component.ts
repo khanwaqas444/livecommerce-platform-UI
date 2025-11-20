@@ -189,10 +189,14 @@ getTimelineSteps(): TimelineStep[] {
 
 getFullImageUrl(imageUrl?: string): string {
   if (!imageUrl) return 'assets/images/no-image.png';
+
   if (imageUrl.startsWith('http')) return imageUrl;
+
   return `http://localhost:8082${imageUrl.startsWith('/') ? imageUrl : '/' + imageUrl}`;
 }
 
-
+onImgError(event: any) {
+  event.target.src = 'assets/images/no-image.png';
+}
 
 }

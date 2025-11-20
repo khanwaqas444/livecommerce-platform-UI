@@ -1,3 +1,4 @@
+<ng-container *ngIf="true"></ng-container>
 <div class="reservation-detail" *ngIf="!loading && reservation; else loadingTpl">
 
   <!-- HEADER -->
@@ -20,7 +21,8 @@
   <!-- UPCOMING NOTICE -->
   <div class="alert upcoming">
     <strong>📅 Upcoming Reservation</strong>
-    <p>This reservation is scheduled for tomorrow at {{ reservation?.startTime }}. Make sure the customer receives a reminder.</p>
+    <p>This reservation is scheduled for tomorrow at {{ reservation?.startTime }}. Make sure the customer receives a
+      reminder.</p>
   </div>
 
   <div class="main-grid">
@@ -57,39 +59,46 @@
         </div>
       </div>
 
-      <!-- PRODUCTS -->
-      <div class="product" *ngFor="let p of reservation?.products">
-  <img [src]="p.imageUrl" alt="Product" />
-  <div>
-    <p class="product-name">{{ p.name }}</p>
-    <p class="product-desc">{{ p.description }}</p>
-    <p class="price">₹{{ p.price | number }}</p>
+      <!-- PRODUCTS OF INTEREST -->
+<div class="card">
+  <h3>Products of Interest</h3>
+
+  <div class="product" *ngFor="let p of reservation?.products">
+    <div class="product-icon">
+      <img [src]="getFullImageUrl(p?.imageUrl)" 
+           alt="{{ p?.name }}" 
+           (error)="onImgError($event)" />
+    </div>
+
+    <div class="product-info">
+      <p class="product-name">{{ p.name }}</p>
+      <p class="product-desc">{{ p.description }}</p>
+      <p class="price">₹{{ p.price | number }}</p>
+    </div>
   </div>
 </div>
 
 
-
       <!-- TIMELINE -->
-<div class="card">
-  <h3>Timeline</h3>
-  <ul class="timeline">
-    <li *ngFor="let step of getTimelineSteps()" 
-        [ngClass]="{ done: step.done, cancelled: step.cancelled }">
-      <span class="circle"></span>
-      <div>
-        <strong>{{ step.label }}</strong>
-        <p *ngIf="step.time">{{ step.time | date:'medium' }}</p>
-        <p *ngIf="!step.time && !step.cancelled && !step.done" class="pending-text">
-          Pending
-        </p>
-        <p *ngIf="step.done && !step.time && !step.cancelled" class="done-text">
-          Completed
-        </p>
-        <p *ngIf="step.cancelled" class="cancel-text">Reservation Cancelled</p>
+      <div class="card">
+        <h3>Timeline</h3>
+        <ul class="timeline">
+          <li *ngFor="let step of getTimelineSteps()" [ngClass]="{ done: step.done, cancelled: step.cancelled }">
+            <span class="circle"></span>
+            <div>
+              <strong>{{ step.label }}</strong>
+              <p *ngIf="step.time">{{ step.time | date:'medium' }}</p>
+              <p *ngIf="!step.time && !step.cancelled && !step.done" class="pending-text">
+                Pending
+              </p>
+              <p *ngIf="step.done && !step.time && !step.cancelled" class="done-text">
+                Completed
+              </p>
+              <p *ngIf="step.cancelled" class="cancel-text">Reservation Cancelled</p>
+            </div>
+          </li>
+        </ul>
       </div>
-    </li>
-  </ul>
-</div>
 
 
       <!-- INTERNAL NOTES -->

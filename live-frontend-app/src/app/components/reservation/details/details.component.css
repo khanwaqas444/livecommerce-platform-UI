@@ -125,8 +125,8 @@
     justify-content: center;
 
     img {
-      width: 48px;
-      height: 48px;
+      width: 100px;
+      height: 88px;
       border-radius: 10px;
       object-fit: cover;
       border: 1px solid #e5e7eb;

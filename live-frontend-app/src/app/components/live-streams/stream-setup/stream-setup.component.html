@@ -1,0 +1,43 @@
+<div class="setup">
+  <h3>Stream Setup</h3>
+  <div class="card">
+    <label>Title</label>
+    <input [(ngModel)]="model.title" placeholder="Stream title" />
+
+    <div class="row">
+      <div>
+        <label>Category</label>
+        <select [(ngModel)]="model.category">
+          <option>Electronics</option>
+          <option>Fashion</option>
+        </select>
+      </div>
+      <div>
+        <label>Privacy</label>
+        <select [(ngModel)]="model.privacy">
+          <option value="public">Public</option>
+          <option value="unlisted">Unlisted</option>
+        </select>
+      </div>
+    </div>
+
+    <label>RTMP URL</label>
+    <input [(ngModel)]="model.rtmpUrl" />
+
+    <label>Stream Key</label>
+    <div class="key-row">
+      <input [(ngModel)]="model.streamKey" />
+      <button class="btn outline" (click)="regenerateKey()">Regenerate</button>
+    </div>
+
+    <h4>Select Products</h4>
+    <div class="product-list">
+      <div class="product" *ngFor="let p of products" [class.selected]="model.selectedProducts.includes(p.id)" (click)="toggleProduct(p.id)">
+        <div>{{ p.name }}</div>
+        <div class="price">{{ p.price }}</div>
+      </div>
+    </div>
+
+    <button class="btn" (click)="save()" [disabled]="saving">{{ saving ? 'Saving...' : 'Save Stream' }}</button>
+  </div>
+</div>

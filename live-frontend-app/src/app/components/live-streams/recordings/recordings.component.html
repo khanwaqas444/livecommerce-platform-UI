@@ -1,0 +1,17 @@
+<div class="rec-page">
+  <h3>Recordings</h3>
+
+  <div class="grid">
+    <div class="card rec" *ngFor="let r of recordings">
+      <div class="thumb"></div>
+      <div class="info">
+        <div class="title">{{ r.title }}</div>
+        <div class="meta">{{ r.date }} · {{ r.duration }}</div>
+        <div class="actions">
+          <button class="btn" (click)="play(r.id)">Play</button>
+          <button class="btn outline" (click)="download(r.id)">Download</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,7 @@
+.rec-page { padding:12px; }
+.grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap:12px; }
+.rec { background:#fff; border-radius:8px; overflow:hidden; box-shadow:0 6px 18px rgba(2,6,23,0.04); }
+.thumb { height:140px; background:#111827; opacity:0.08; }
+.info { padding:10px; }
+.meta { color:#6b7280; font-size:13px; margin-bottom:8px; }
+.actions { display:flex; gap:8px; }

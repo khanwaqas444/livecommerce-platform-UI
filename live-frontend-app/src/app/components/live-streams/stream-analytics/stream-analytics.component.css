@@ -1,0 +1,7 @@
+.analytics { padding:12px; }
+.kpi-row { display:flex; gap:10px; margin-bottom:10px; }
+.kpi { background:#fff; padding:10px; border-radius:8px; box-shadow:0 6px 18px rgba(2,6,23,0.04); flex:1; text-align:left; }
+.kpi .val { font-weight:700; font-size:18px; }
+.chart.card { padding:8px; margin-top:10px; border-radius:8px; }
+.timeline.card { padding:10px; margin-top:10px; border-radius:8px; }
+.event { padding:8px 0; border-bottom:1px dashed #f3f4f6; }

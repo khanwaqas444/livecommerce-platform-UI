@@ -1,25 +1,34 @@
 <div class="detail-container" *ngIf="product">
   <div class="left-section">
-    <img [src]="'http://localhost:8082' + product.imageUrl" alt="{{ product.name }}">
+    <img
+      [src]="getFullImageUrl(product?.imageUrl)"
+      alt="{{ product?.name || 'Product' }}"
+      (error)="onImgError($event)"
+    />
   </div>
 
   <div class="right-section">
-    <h1>{{ product.name }}</h1>
-    <p class="category">{{ product.category }}</p>
-    <h2>₹{{ product.price }}</h2>
+    <h1>{{ product?.name }}</h1>
+    <p class="category">{{ product?.category }}</p>
+    <h2>₹{{ product?.price }}</h2>
 
-    <p class="description">{{ product.description }}</p>
+    <p class="description">{{ product?.description }}</p>
 
     <div class="status-stock">
-      <span [ngClass]="product.live ? 'active' : 'inactive'">
-        {{ product.live ? 'Active' : 'Inactive' }}
+      <span [ngClass]="product?.live ? 'active' : 'inactive'">
+        {{ product?.live ? 'Active' : 'Inactive' }}
       </span>
-      <span>{{ product.stock > 0 ? 'In Stock' : 'Out of Stock' }} ({{ product.stock }})</span>
+
+      <!-- ✅ FIXED: use safe operator and fallback -->
+      <span>
+        {{ (product?.stock || 0) > 0 ? 'In Stock' : 'Out of Stock' }}
+        ({{ product?.stock ?? 0 }})
+      </span>
     </div>
 
     <div class="actions">
       <button class="btn-buy">Buy Now</button>
-      <button class="btn-back" (click)="router.navigate(['/products'])">Back</button>
+      <button class="btn-back" (click)="goBack()">Back</button>
     </div>
   </div>
 </div>
