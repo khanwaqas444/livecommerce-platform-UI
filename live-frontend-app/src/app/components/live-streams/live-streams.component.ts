@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { StreamService } from '../../core/stream.service';
 
-// child imports (standalone components)
+// child components
 import { StreamSetupComponent } from './stream-setup/stream-setup.component';
 import { StreamAnalyticsComponent } from './stream-analytics/stream-analytics.component';
 import { RecordingsComponent } from './recordings/recordings.component';
@@ -9,53 +10,70 @@ import { RecordingsComponent } from './recordings/recordings.component';
 @Component({
   selector: 'app-live-streams',
   standalone: true,
-  imports: [CommonModule, StreamSetupComponent, StreamAnalyticsComponent, RecordingsComponent],
+  imports: [
+    CommonModule,
+    StreamSetupComponent,
+    StreamAnalyticsComponent,
+    RecordingsComponent
+  ],
   templateUrl: './live-streams.component.html',
   styleUrls: ['./live-streams.component.css']
 })
-export class LiveStreamsComponent {
-  // available views: 'list' | 'setup' | 'analytics' | 'recordings'
-  currentView: 'list'|'setup'|'analytics'|'recordings' = 'list';
+export class LiveStreamsComponent implements OnInit {
 
-  // sample streams array (replace with service data)
+  currentView: 'list' | 'setup' | 'analytics' | 'recordings' = 'list';
   streams: any[] = [];
 
-  // pagination
-  page = 1;
-  pageSize = 5;
-  total = 0;
+  hostId = 'AI-123456';
 
-  // stats
-  stats = { totalStreams: 0, watchHours: 0, avgViewers: 0, reservations: 0 };
+  stats = {
+    totalStreams: 0,
+    watchHours: 0,
+    avgViewers: 0,
+    reservations: 0,
+  };
 
-  constructor() {
-    // demo: keep empty or call service to populate
+  constructor(private streamService: StreamService) {}
+
+  ngOnInit(): void {
+    this.loadStreams();
   }
 
-  show(v: 'list'|'setup'|'analytics'|'recordings') {
-    this.currentView = v;
+  // Load streams by host
+  loadStreams() {
+    this.streamService.getStreamsByHost(this.hostId).subscribe(
+      (res) => {
+        console.log('STREAM LIST:', res);
+        this.streams = res || [];
+        this.stats.totalStreams = this.streams.length;
+      },
+      (err) => {
+        console.error('Failed to load streams', err);
+      }
+    );
   }
 
-  // helpers for list view (replace with real logic)
-  formatDuration(start?: string|null, end?: string|null) {
+  show(view: 'list' | 'setup' | 'analytics' | 'recordings') {
+    this.currentView = view;
+  }
+
+  formatDuration(start: string | null, end: string | null) {
     if (!start) return '--';
     const s = new Date(start);
     const e = end ? new Date(end) : new Date();
-    const ms = Math.max(0, e.getTime() - s.getTime());
-    const mins = Math.floor(ms / 60000);
-    const secs = Math.floor((ms % 60000) / 1000);
+    const diff = e.getTime() - s.getTime();
+
+    const mins = Math.floor(diff / 60000);
+    const secs = Math.floor((diff % 60000) / 1000);
+
     return `${mins}m ${secs}s`;
   }
 
-  // navigation helper: show analytics for a stream
   openAnalyticsFor(streamId: string) {
-    // set current view to analytics; child can fetch by Input or service
-    this.currentView = 'analytics';
-    // optionally communicate selected id via a shared service or localStorage (not included here)
     localStorage.setItem('live_stream_selected_id', streamId);
+    this.currentView = 'analytics';
   }
 }
-
 
 // import { Component } from '@angular/core';
 // import { CommonModule } from '@angular/common';
